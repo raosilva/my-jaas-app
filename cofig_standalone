@@ -1,0 +1,5 @@
+<security-domain name="my-jaas-domain">
+    <authentication>
+        <login-module code="com.example.security.SimpleLoginModule" flag="required"/>
+    </authentication>
+</security-domain>
