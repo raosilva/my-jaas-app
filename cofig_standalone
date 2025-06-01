@@ -3,3 +3,42 @@
         <login-module code="com.example.security.SimpleLoginModule" flag="required"/>
     </authentication>
 </security-domain>
+
+private Principal userPrincipal;
+private boolean loginSuccess = false;
+
+@Override
+public boolean login() throws LoginException {
+    if (callbackHandler == null) {
+        throw new LoginException("No CallbackHandler available");
+    }
+
+    NameCallback nameCb = new NameCallback("Username: ");
+    PasswordCallback passCb = new PasswordCallback("Password: ", false);
+    Callback[] callbacks = new Callback[]{nameCb, passCb};
+
+    try {
+        callbackHandler.handle(callbacks);
+        username = nameCb.getName();
+        password = new String(passCb.getPassword());
+
+        if ("admin".equals(username) && "admin123".equals(password)) {
+            userPrincipal = new SimplePrincipal(username);
+            loginSuccess = true;
+            return true;
+        } else {
+            throw new FailedLoginException("Invalid credentials");
+        }
+    } catch (Exception e) {
+        throw new LoginException("Error during login: " + e.getMessage());
+    }
+}
+
+@Override
+public boolean commit() throws LoginException {
+    if (loginSuccess) {
+        subject.getPrincipals().add(userPrincipal);
+        return true;
+    }
+    return false;
+}
