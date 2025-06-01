@@ -82,3 +82,43 @@ public class SimpleGroup implements java.security.acl.Group {
     }
 }
 
+
+
+
+<security-domain name="saml-security-domain" cache-type="default">
+    <authentication>
+        <login-module code="org.picketlink.identity.federation.bindings.jboss.auth.SAML2LoginModule" flag="required">
+            <module-option name="roleKey" value="Roles"/>
+            <module-option name="principalNamePolicy" value="FROM_NAME_ID"/>
+        </login-module>
+    </authentication>
+</security-domain>
+
+
+
+<jboss-web>
+    <security-domain>java:/jaas/saml-security-domain</security-domain>
+</jboss-web>
+
+
+<login-config>
+    <auth-method>FORM</auth-method>
+    <realm-name>SAMLRealm</realm-name>
+</login-config>
+
+
+<deployment>
+    <dependencies>
+        <module name="org.picketlink.identity.federation.bindings"/>
+    </dependencies>
+</deployment>
+
+
+<filter>
+    <filter-name>PicketLink Federation Filter</filter-name>
+    <filter-class>org.picketlink.servlet.PicketLinkServletFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>PicketLink Federation Filter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
