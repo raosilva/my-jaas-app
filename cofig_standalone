@@ -122,3 +122,10 @@ public class SimpleGroup implements java.security.acl.Group {
     <filter-name>PicketLink Federation Filter</filter-name>
     <url-pattern>/*</url-pattern>
 </filter-mapping>
+
+<dependency>
+    <groupId>org.picketlink</groupId>
+    <artifactId>picketlink-servlet</artifactId>
+    <version>2.5.5.SP13</version>
+</dependency>
+
